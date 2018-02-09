@@ -1,0 +1,147 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.ssm.dao.StudentMapper" >
+  <resultMap id="BaseResultMap" type="com.ssm.pojo.Student" >
+    <id column="stu_id" property="stuId" jdbcType="INTEGER" />
+    <result column="stu_name" property="stuName" jdbcType="VARCHAR" />
+    <result column="stu_sex" property="stuSex" jdbcType="VARCHAR" />
+    <result column="stu_nation" property="stuNation" jdbcType="VARCHAR" />
+    <result column="stu_age" property="stuAge" jdbcType="INTEGER" />
+    <result column="stu_address" property="stuAddress" jdbcType="VARCHAR" />
+    <result column="stu_num" property="stuNum" jdbcType="INTEGER" />
+    <result column="stu_idnumber" property="stuIdnumber" jdbcType="VARCHAR" />
+    <result column="stu_img" property="stuImg" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    stu_id, stu_name, stu_sex, stu_nation, stu_age, stu_address, stu_num, stu_idnumber, 
+    stu_img
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from cram_student
+    where stu_id = #{stuId,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from cram_student
+    where stu_id = #{stuId,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.ssm.pojo.Student" >
+    insert into cram_student (stu_id, stu_name, stu_sex, 
+      stu_nation, stu_age, stu_address, 
+      stu_num, stu_idnumber, stu_img
+      )
+    values (#{stuId,jdbcType=INTEGER}, #{stuName,jdbcType=VARCHAR}, #{stuSex,jdbcType=VARCHAR}, 
+      #{stuNation,jdbcType=VARCHAR}, #{stuAge,jdbcType=INTEGER}, #{stuAddress,jdbcType=VARCHAR}, 
+      #{stuNum,jdbcType=INTEGER}, #{stuIdnumber,jdbcType=VARCHAR}, #{stuImg,jdbcType=VARCHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.ssm.pojo.Student" >
+    insert into cram_student
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="stuId != null" >
+        stu_id,
+      </if>
+      <if test="stuName != null" >
+        stu_name,
+      </if>
+      <if test="stuSex != null" >
+        stu_sex,
+      </if>
+      <if test="stuNation != null" >
+        stu_nation,
+      </if>
+      <if test="stuAge != null" >
+        stu_age,
+      </if>
+      <if test="stuAddress != null" >
+        stu_address,
+      </if>
+      <if test="stuNum != null" >
+        stu_num,
+      </if>
+      <if test="stuIdnumber != null" >
+        stu_idnumber,
+      </if>
+      <if test="stuImg != null" >
+        stu_img,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="stuId != null" >
+        #{stuId,jdbcType=INTEGER},
+      </if>
+      <if test="stuName != null" >
+        #{stuName,jdbcType=VARCHAR},
+      </if>
+      <if test="stuSex != null" >
+        #{stuSex,jdbcType=VARCHAR},
+      </if>
+      <if test="stuNation != null" >
+        #{stuNation,jdbcType=VARCHAR},
+      </if>
+      <if test="stuAge != null" >
+        #{stuAge,jdbcType=INTEGER},
+      </if>
+      <if test="stuAddress != null" >
+        #{stuAddress,jdbcType=VARCHAR},
+      </if>
+      <if test="stuNum != null" >
+        #{stuNum,jdbcType=INTEGER},
+      </if>
+      <if test="stuIdnumber != null" >
+        #{stuIdnumber,jdbcType=VARCHAR},
+      </if>
+      <if test="stuImg != null" >
+        #{stuImg,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.ssm.pojo.Student" >
+    update cram_student
+    <set >
+      <if test="stuName != null" >
+        stu_name = #{stuName,jdbcType=VARCHAR},
+      </if>
+      <if test="stuSex != null" >
+        stu_sex = #{stuSex,jdbcType=VARCHAR},
+      </if>
+      <if test="stuNation != null" >
+        stu_nation = #{stuNation,jdbcType=VARCHAR},
+      </if>
+      <if test="stuAge != null" >
+        stu_age = #{stuAge,jdbcType=INTEGER},
+      </if>
+      <if test="stuAddress != null" >
+        stu_address = #{stuAddress,jdbcType=VARCHAR},
+      </if>
+      <if test="stuNum != null" >
+        stu_num = #{stuNum,jdbcType=INTEGER},
+      </if>
+      <if test="stuIdnumber != null" >
+        stu_idnumber = #{stuIdnumber,jdbcType=VARCHAR},
+      </if>
+      <if test="stuImg != null" >
+        stu_img = #{stuImg,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where stu_id = #{stuId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.ssm.pojo.Student" >
+    update cram_student
+    set stu_name = #{stuName,jdbcType=VARCHAR},
+      stu_sex = #{stuSex,jdbcType=VARCHAR},
+      stu_nation = #{stuNation,jdbcType=VARCHAR},
+      stu_age = #{stuAge,jdbcType=INTEGER},
+      stu_address = #{stuAddress,jdbcType=VARCHAR},
+      stu_num = #{stuNum,jdbcType=INTEGER},
+      stu_idnumber = #{stuIdnumber,jdbcType=VARCHAR},
+      stu_img = #{stuImg,jdbcType=VARCHAR}
+    where stu_id = #{stuId,jdbcType=INTEGER}
+  </update>
+  <select id="selectAllStudents" resultMap="BaseResultMap">
+  	 select 
+    <include refid="Base_Column_List" />
+    from cram_student
+  </select>
+</mapper>
