@@ -26,12 +26,12 @@
     delete from cram_student
     where stu_id = #{stuId,jdbcType=INTEGER}
   </delete>
-  <insert id="insert" parameterType="com.ssm.pojo.Student" >
-    insert into cram_student (stu_id, stu_name, stu_sex, 
-      stu_nation, stu_age, stu_address, 
+  <insert id="insert" parameterType="com.ssm.pojo.Student" useGeneratedKeys="true" keyProperty="stu_id">
+    insert into cram_student (stu_name, stu_sex, 
+      stu_nation, stu_age, stu_address,  
       stu_num, stu_idnumber, stu_img
       )
-    values (#{stuId,jdbcType=INTEGER}, #{stuName,jdbcType=VARCHAR}, #{stuSex,jdbcType=VARCHAR}, 
+    values ( #{stuName,jdbcType=VARCHAR}, #{stuSex,jdbcType=VARCHAR}, 
       #{stuNation,jdbcType=VARCHAR}, #{stuAge,jdbcType=INTEGER}, #{stuAddress,jdbcType=VARCHAR}, 
       #{stuNum,jdbcType=INTEGER}, #{stuIdnumber,jdbcType=VARCHAR}, #{stuImg,jdbcType=VARCHAR}
       )

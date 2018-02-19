@@ -90,4 +90,14 @@ public class Student {
     public void setStuImg(String stuImg) {
         this.stuImg = stuImg == null ? null : stuImg.trim();
     }
+
+	@Override
+	public String toString() {
+		return "Student [stuId=" + stuId + ", stuName=" + stuName + ", stuSex="
+				+ stuSex + ", stuNation=" + stuNation + ", stuAge=" + stuAge
+				+ ", stuAddress=" + stuAddress + ", stuNum=" + stuNum
+				+ ", stuIdnumber=" + stuIdnumber + ", stuImg=" + stuImg + "]";
+	}
+    
+    
 }

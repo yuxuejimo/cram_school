@@ -24,6 +24,12 @@ $('#table').bootstrapTable({
     }, {
         field: 'stuAge',
         title: '年龄'
+    }, {
+        field: 'stuImg',
+        title: '照片',
+        formatter: function(value,row,index){
+                        return '<img  src='+value+' width="30px" height="40px" >';
+                    }
     }],
     pagination:true,
     pageList:[10, 15, 20],
@@ -51,10 +57,78 @@ $("#stu-update").click(function(){
     }
 });
 
-//添加学生信息
+//判断元素是否在数组中
+function isInArray(arr,value){
+    var index = $.inArray(value,arr);
+    if(index >= 0){
+        return true;
+    }
+    return false;
+}
+
+//上传图片
+function uploadImg(){
+    var filepath = $("#stu-img").val()
+    var extStart = filepath.lastIndexOf(".");
+    var suffix = filepath.substring(extStart+1,filepath.length);
+    var accept_type = ['jpg','jpeg','png'];
+    if(isInArray(accept_type,suffix)){
+        if($("#stu-img").val() != "") {
+            $.ajaxFileUpload({
+                type: "POST",
+                url:"/cram_school/uploadstuimg",
+                dataType: "json",
+                fileElementId:"stu-img",  // 文件的id
+                success: function(d){
+                    if(d.code == 0) {
+                        //alert("上传成功");
+                        //图片显示
+                        var imgurl = "/cram_school/"+d.data.url;
+                        $("#avatar").attr("value",imgurl);
+                        $("#avatarShow").attr("src",imgurl);
+                    }
+                },
+                error: function () {
+                    alert("上传失败");
+                },
+            });
+        } else {
+                alert("请先选择文件");
+        }
+    }else{
+        return false;
+    }
+    
+}
+
+//保存学生信息
+$("#stu-save").click(function(){
+    
+   $.ajax({
+       url:"/cram_school/stu/addStudent",
+       type:"POST",
+       contentType : "application/json;charse=UTF-8",
+       data:JSON.stringify({
+         "stuId":90,
+         "stuName":$("#stu-name").val(),
+         "stuSex":$("input[name='sex-radio']").val(),
+         "stuNation":$("#stu-nation").val(),
+         "stuAge":$("#stu-age").val(),
+         "stuAddress":$("#stu-address").val(),
+         "stuNum":$("#stu-num").val(),
+         "stuIdnumber":$("#stu-idnumber").val(),
+         "stuImg":$("#avatarShow").attr("src")  
+       }),
+       success:function(res){
+           $("#table").bootstrapTable('refresh');
+       }
+   }) ;
+    $('#stu-model').modal('hide');
+});
+
+//打开添加学生信息输入框
 $("#stu-add").click(function(){
     $('#stu-model').modal('show');
-    
 });
 
 //删除

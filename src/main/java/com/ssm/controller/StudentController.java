@@ -7,6 +7,7 @@ import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
@@ -33,4 +34,13 @@ public class StudentController {
 	public List<Student> showAllStudent(){
 		return stuService.getAllStudent();
 	} 
+	
+	
+	@RequestMapping("/addStudent")
+	public String addStudent(@RequestBody Student s){
+		System.out.println("newstu:"+s);
+		stuService.insertStudent(s);
+		return "student";
+		
+	}
 }

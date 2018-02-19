@@ -20,9 +20,16 @@ public class StudentService implements IStudentService{
 		return studentMapper.selectByPrimaryKey(stu_id);
 	}
 
-	@Override
+	
 	public List<Student> getAllStudent() {
 		return studentMapper.selectAllStudents();
+	}
+
+
+	@Override
+	public void insertStudent(Student s) {
+		// TODO Auto-generated method stub
+		studentMapper.insert(s);
 	}
 
 }
