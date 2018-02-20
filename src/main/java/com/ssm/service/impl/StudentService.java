@@ -32,4 +32,21 @@ public class StudentService implements IStudentService{
 		studentMapper.insert(s);
 	}
 
+
+	@Override
+	public void updateStudent(Student s) {
+		// TODO Auto-generated method stub
+		studentMapper.updateByPrimaryKey(s);
+	}
+
+
+	@Override
+	public void deleteStudent(Integer[] stuids) {
+		// TODO Auto-generated method stub
+		int length = stuids.length;
+		for(int i=0;i<length;i++){
+			studentMapper.deleteByPrimaryKey(stuids[i]);
+		}
+	}
+
 }

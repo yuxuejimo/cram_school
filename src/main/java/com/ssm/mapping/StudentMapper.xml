@@ -97,6 +97,8 @@
       </if>
     </trim>
   </insert>
+  
+  <!-- 会对字段进行判断再更新(如果为Null就忽略更新)，你只更新某一字段 -->
   <update id="updateByPrimaryKeySelective" parameterType="com.ssm.pojo.Student" >
     update cram_student
     <set >

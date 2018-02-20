@@ -10,4 +10,8 @@ public interface IStudentService {
 	public List<Student> getAllStudent();
 	
 	public void insertStudent(Student s);
+	
+	public void updateStudent(Student s);
+	
+	public void deleteStudent(Integer[] stuids);
 }

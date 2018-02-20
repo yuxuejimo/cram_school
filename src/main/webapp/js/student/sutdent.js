@@ -12,6 +12,9 @@ $('#table').bootstrapTable({
     columns: [{
         checkbox: true
     }, {
+        field: 'stuId',
+        visible: false
+    }, {
         field: 'stuName',
         title: '姓名',
         sortable: true
@@ -25,6 +28,15 @@ $('#table').bootstrapTable({
         field: 'stuAge',
         title: '年龄'
     }, {
+        field: 'stuAddress',
+        title: '家庭住址'
+    }, {
+       field: 'stuNum',
+        title: '学号'
+    }, {
+       field: 'stuIdnumber',
+        title: '身份证号'
+    }, {
         field: 'stuImg',
         title: '照片',
         formatter: function(value,row,index){
@@ -32,6 +44,7 @@ $('#table').bootstrapTable({
                     }
     }],
     pagination:true,
+    paginationLoop:false,
     pageList:[10, 15, 20],
     striped:true,
     clickToSelect:true
@@ -44,6 +57,38 @@ $("#export-excel").click(function(){
     json2excel(json_data, type);
 });
 
+//将信息写在模态框中
+function fillModal(stu_message){
+     $("#stu-id").val(stu_message['stuId']);
+     $("#stu-name").val(stu_message['stuName']);
+     if(stu_message['stuSex']=='男'){
+        $("input[name='sex-radio']").eq(0).attr("checked","true");
+     }else{
+         $("input[name='sex-radio']").eq(1).attr("checked","true");
+     }
+     
+     $("#stu-nation").val(stu_message['stuNation']);
+     $("#stu-age").val(stu_message['stuAge']);
+     $("#stu-address").val(stu_message['stuAddress']);
+     $("#stu-num").val(stu_message['stuNum']);
+     $("#stu-idnumber").val(stu_message['stuIdnumber']);
+     $("#avatarShow").attr("src",stu_message['stuImg']);
+}
+
+//清空模态框
+function clearModal(){
+     $("#stu-id").val('');
+     $("#stu-name").val('');
+     $("input[name='sex-radio']").eq(0).attr("checked","false");
+     $("input[name='sex-radio']").eq(1).attr("checked","false");
+     $("#stu-nation").val('');
+     $("#stu-age").val('');
+     $("#stu-address").val('');
+     $("#stu-num").val('');
+     $("#stu-idnumber").val('');
+     $("#avatarShow").attr("src",'');
+}
+
 //修改学生信息
 $("#stu-update").click(function(){
     var stu = $('#table').bootstrapTable('getSelections');
@@ -52,8 +97,8 @@ $("#stu-update").click(function(){
         return false;
     }else{
         $('#stu-model').modal('show');
-        $("#recipient-name").val(stu[0]['cname']);
-        $("#message-text").val(stu[0]['title']);
+        var stuu = stu[0];
+        fillModal(stuu);
     }
 });
 
@@ -83,7 +128,7 @@ function uploadImg(){
                     if(d.code == 0) {
                         //alert("上传成功");
                         //图片显示
-                        var imgurl = "/cram_school/"+d.data.url;
+                        var imgurl = "/cram_school"+d.data.url;
                         $("#avatar").attr("value",imgurl);
                         $("#avatarShow").attr("src",imgurl);
                     }
@@ -103,27 +148,52 @@ function uploadImg(){
 
 //保存学生信息
 $("#stu-save").click(function(){
-    
-   $.ajax({
-       url:"/cram_school/stu/addStudent",
-       type:"POST",
-       contentType : "application/json;charse=UTF-8",
-       data:JSON.stringify({
-         "stuId":90,
-         "stuName":$("#stu-name").val(),
-         "stuSex":$("input[name='sex-radio']").val(),
-         "stuNation":$("#stu-nation").val(),
-         "stuAge":$("#stu-age").val(),
-         "stuAddress":$("#stu-address").val(),
-         "stuNum":$("#stu-num").val(),
-         "stuIdnumber":$("#stu-idnumber").val(),
-         "stuImg":$("#avatarShow").attr("src")  
-       }),
-       success:function(res){
-           $("#table").bootstrapTable('refresh');
-       }
-   }) ;
-    $('#stu-model').modal('hide');
+    if($("#stu-id").val()){
+        $.ajax({
+           url:"/cram_school/stu/updateStudent",
+           type:"POST",
+           contentType : "application/json;charse=UTF-8",
+           data:JSON.stringify({
+             "stuId":$("#stu-id").val(),
+             "stuName":$("#stu-name").val(),
+             "stuSex":$("input[name='sex-radio']").val(),
+             "stuNation":$("#stu-nation").val(),
+             "stuAge":$("#stu-age").val(),
+             "stuAddress":$("#stu-address").val(),
+             "stuNum":$("#stu-num").val(),
+             "stuIdnumber":$("#stu-idnumber").val(),
+             "stuImg":$("#avatarShow").attr("src")  
+           }),
+           success:function(res){
+               $("#table").bootstrapTable('refresh');
+           }
+        });
+        clearModal();
+        $('#stu-model').modal('hide');
+    }else{
+         $.ajax({
+           url:"/cram_school/stu/addStudent",
+           type:"POST",
+           contentType : "application/json;charse=UTF-8",
+           data:JSON.stringify({
+             "stuId":90,
+             "stuName":$("#stu-name").val(),
+             "stuSex":$("input[name='sex-radio']").val(),
+             "stuNation":$("#stu-nation").val(),
+             "stuAge":$("#stu-age").val(),
+             "stuAddress":$("#stu-address").val(),
+             "stuNum":$("#stu-num").val(),
+             "stuIdnumber":$("#stu-idnumber").val(),
+             "stuImg":$("#avatarShow").attr("src")  
+           }),
+           success:function(res){
+               $("#table").bootstrapTable('refresh');
+           }
+        });
+        clearModal();
+        $('#stu-model').modal('hide');
+    }
+  
 });
 
 //打开添加学生信息输入框
@@ -133,15 +203,24 @@ $("#stu-add").click(function(){
 
 //删除
 $("#stu-del").click(function(){
-     var stu = $('#table').bootstrapTable('getSelections');
+    var stu = $('#table').bootstrapTable('getSelections');
     var stu_len = stu.length;
     if(stu_len<1){
        alert("请选择至少一条学生信息！");
        return false;
     }else{
-       for(var i=0;i<stu_len;i++){
-           console.log(stu[i]);
-       }
+        var stuid_list = stu.map(function(item){
+            return item['stuId'];
+        });
+        $.ajax({
+            url:'/cram_school/stu/deleteStudent',
+            //contentType : "application/json;charse=UTF-8",
+            type: 'POST',
+            data:{'stuids': stuid_list},
+            success:function(res){
+                $("#table").bootstrapTable('refresh');    
+            }
+        })
     }
 });
 
